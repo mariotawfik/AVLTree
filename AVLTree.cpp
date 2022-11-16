@@ -272,8 +272,25 @@ AVLTree* AVLTree::LeftRotate()
 
 void AVLTree::ToString()
 {
-
-} //Incomplete
+    if(parent == nullptr){
+        cout << value << ", Address: " << this << endl;
+    }else{
+        if(this == parent->left){
+            cout << "L: " << value << ", Address: " << this << " ,Parent Value: " << parent->value <<  endl;
+        }else{
+            if(this == parent->right){
+                cout << "R: " << value << ", Address: " << this << " ,Parent Value: " << parent->value << endl;
+            }
+        }
+    }
+    
+    if(left != nullptr){
+        left->ToString();
+    }
+    if(right != nullptr){
+        right->ToString();
+    }
+}
 
 bool AVLTree::Verify()
 {
