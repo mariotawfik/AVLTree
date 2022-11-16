@@ -3,12 +3,15 @@
 //
 
 #include "AVLTree.h"
+#include <iostream>
+using namespace std;
 
 AVLTree::AVLTree()
 {
     value = char(0);
     right = nullptr;
     left = nullptr;
+    parent = nullptr;
 }
 
 AVLTree::~AVLTree()
@@ -18,21 +21,23 @@ AVLTree::~AVLTree()
     delete this;
 }
 
-void AVLTree::Insert(char v)
+AVLTree* AVLTree::Insert(char v)
 {
     AVLTree* currentNode = this; //The current node being checked
-    bool inserted = false; //Checks whether the value has been inserted or not in order to exit the loop
-    while(inserted == false)
-    {
+        if (currentNode->value == char(0))
+        {
+            currentNode->value = v;
+        }
+
         if (v < currentNode->value)
         {
             if (currentNode->left == nullptr)
             {
                 left = new AVLTree;
                 left->value = v;
-                inserted = true;
+                left->parent = currentNode;
             } else {
-                currentNode = currentNode->left;
+                currentNode->left->Insert(v);
             }
         }
 
@@ -42,18 +47,46 @@ void AVLTree::Insert(char v)
             {
                 right = new AVLTree;
                 right->value = v;
-                inserted = true;
+                right->parent = currentNode;
             } else {
-                currentNode = currentNode->right;
+                currentNode->right->Insert(v);
             }
         }
 
-        if (v == currentNode->value)
+        if(v != currentNode->value)
         {
-            inserted = true;
+            while(currentNode != nullptr)
+            {
+                int currentBalance = currentNode->ComputeUnbalanceLevel();
+                if(currentBalance == -2 && currentNode->left->ComputeUnbalanceLevel() == -1)
+                {
+                    currentNode = currentNode->RightRotate();
+                }
+                if(currentBalance == 2 && currentNode->right->ComputeUnbalanceLevel() == 1)
+                {
+                    currentNode = currentNode->LeftRotate();
+                }
+                if(currentBalance == 2 && currentNode->right->ComputeUnbalanceLevel() == -1)
+                {
+                    currentNode = currentNode->right->RightRotate();
+                    currentNode = currentNode->LeftRotate();
+                }
+                if(currentBalance == -2 && currentNode->left->ComputeUnbalanceLevel() == 1)
+                {
+                    currentNode = currentNode->left->LeftRotate();
+                    currentNode = currentNode->RightRotate();
+                }
+                currentNode = currentNode->parent;
+
+            }
         }
+    currentNode = this;
+    while(currentNode->parent != nullptr)
+    {
+        currentNode = currentNode->parent;
     }
-} //Incomplete
+    return currentNode;
+}
 
 AVLTree* AVLTree::Find(char v)
 {
@@ -85,15 +118,106 @@ AVLTree* AVLTree::Find(char v)
             currentNode->Find(v);
         }
     }
+    return nullptr;
 }
 
 AVLTree* AVLTree::Delete(char v)
 {
-    
+    AVLTree* toBeDeleted = Find(v);
+    if(toBeDeleted->left == nullptr && toBeDeleted ->right == nullptr)
+    {
+        toBeDeleted->parent = nullptr;
+        return toBeDeleted;
+    }
+    if(toBeDeleted->left == nullptr)
+    {
+        if(toBeDeleted == toBeDeleted->parent->right)
+        {
+            toBeDeleted->parent->right = toBeDeleted->right;
+        }
+    }
 } //Incomplete
 
 int AVLTree::ComputeUnbalanceLevel()
 {
-
+    return ((this->right->height())-(this->left->height()));
 }
 
+AVLTree* AVLTree::RightRotate()
+{
+    AVLTree* nodeRotated = this;
+    AVLTree* leftNode = this->left;
+    AVLTree* rightSubtreeHead = this->left->right;
+
+    if(nodeRotated->parent != nullptr)
+    {
+        if((nodeRotated == nodeRotated->parent->left)){
+            nodeRotated->parent->left = leftNode;
+            leftNode->parent = nodeRotated->parent;
+        }else{
+            nodeRotated->parent->right = leftNode;
+            leftNode->parent = nodeRotated->parent;
+        }
+    }else{
+        leftNode->parent = nullptr;
+    }
+    nodeRotated->parent = leftNode;
+    leftNode->right = nodeRotated;
+    nodeRotated->left = rightSubtreeHead;
+    if(rightSubtreeHead != nullptr){
+        rightSubtreeHead->parent = nodeRotated;
+    }
+    return leftNode;
+}
+
+AVLTree* AVLTree::LeftRotate()
+{
+    AVLTree* nodeRotated = this;
+    AVLTree* rightNode = this->right;
+    AVLTree* leftSubtreeHead = this->right->left;
+
+    if(nodeRotated->parent != nullptr)
+    {
+        if((nodeRotated == nodeRotated->parent->left)){
+            nodeRotated->parent->left = rightNode;
+            rightNode->parent = nodeRotated->parent;
+        }else{
+                nodeRotated->parent->right = rightNode;
+                rightNode->parent = nodeRotated->parent;
+        }
+    }else{
+        rightNode->parent = nullptr;
+    }
+    nodeRotated->parent = rightNode;
+    rightNode->left = nodeRotated;
+    nodeRotated->right = leftSubtreeHead;
+    if(leftSubtreeHead != nullptr){
+        leftSubtreeHead->parent = nodeRotated;
+    }
+    return rightNode;
+}
+
+void AVLTree::ToString()
+{
+
+} //Incomplete
+
+bool AVLTree::Verify()
+{
+
+} //Incomplete
+
+int AVLTree::height()
+{
+    if(this != nullptr)
+    {
+        int leftHeight = this->left->height(), rightHeight = this->right->height();
+        if(leftHeight > rightHeight){
+            return (leftHeight+1);
+        }else{
+            return (rightHeight+1);
+        }
+    }else{
+        return 0;
+    }
+}

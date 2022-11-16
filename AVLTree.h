@@ -9,15 +9,16 @@
 class AVLTree {
 private:
     char value; //Character value being stored in the Node
+    int height(); //The height of the node (used to compute the balance)
     AVLTree *left, *right, *parent; //Pointers to left and right children AVLTree Nodes and a pointer to the parent node;
-    void LeftRotate(); //Rotation of the nodes to the left
-    void RightRotate(); //Rotation of the nodes to the right
+    AVLTree* LeftRotate(); //Rotation of the nodes to the left
+    AVLTree* RightRotate(); //Rotation of the nodes to the right
     int ComputeUnbalanceLevel(); //The balance leve of the node, it must be between -1 and 1
 
 public:
     AVLTree(); //Sets value to null character which is char(0)
     ~AVLTree(); //deletes the children nodes and the node itself
-    void Insert(char v); //Creates a new pointer then connects it depending on the value of char
+    AVLTree* Insert(char v); //Creates a new pointer then connects it depending on the value of char. Returns a pointer to the head of the tree.
     AVLTree *Find(char v); //Searches for v and returns the address
     AVLTree *Delete(char v); //Searches for v, returns the address then removes it from the tree structure
     void ToString(); //Displays the tree in a string structure
