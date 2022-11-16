@@ -8,7 +8,7 @@ using namespace std;
 
 AVLTree::AVLTree()
 {
-    value = char(0);
+    value = 0;
     right = nullptr;
     left = nullptr;
     parent = nullptr;
@@ -21,10 +21,10 @@ AVLTree::~AVLTree()
     delete this;
 }
 
-AVLTree* AVLTree::Insert(char v)
+AVLTree* AVLTree::Insert(int v)
 {
     AVLTree* currentNode = this; //The current node being checked
-        if (currentNode->value == char(0))
+        if (currentNode->value == 0)
         {
             currentNode->value = v;
         }
@@ -88,7 +88,7 @@ AVLTree* AVLTree::Insert(char v)
     return currentNode;
 }
 
-AVLTree* AVLTree::Find(char v)
+AVLTree* AVLTree::Find(int v)
 {
     AVLTree* currentNode = this; //The current node being checked
 
@@ -121,53 +121,94 @@ AVLTree* AVLTree::Find(char v)
     return nullptr;
 }
 
-AVLTree* AVLTree::Delete(char v)
+AVLTree* AVLTree::Delete(int v)
 {
     AVLTree* toBeDeleted = Find(v);
-    if(toBeDeleted->left == nullptr && toBeDeleted ->right == nullptr)
-    {
-        toBeDeleted->parent = nullptr;
-        return toBeDeleted;
-    }
-    if(toBeDeleted->left == nullptr)
+    if(toBeDeleted->left == nullptr && toBeDeleted->right != nullptr)
     {
         if(toBeDeleted == toBeDeleted->parent->right)
         {
             toBeDeleted->right->parent = toBeDeleted->parent;
             toBeDeleted->parent->right = toBeDeleted->right;
             toBeDeleted->right = nullptr;
-            toBeDeleted->parent = nullptr;
-            return toBeDeleted;
         }
         if(toBeDeleted == toBeDeleted->parent->left)
         {
             toBeDeleted->right->parent = toBeDeleted->parent;
             toBeDeleted->parent->left = toBeDeleted->right;
             toBeDeleted->right = nullptr;
-            toBeDeleted->parent = nullptr;
-            return toBeDeleted;
         }
     }
-    if(toBeDeleted->right == nullptr)
+    if(toBeDeleted->right == nullptr && toBeDeleted->left != nullptr)
     {
         if(toBeDeleted == toBeDeleted->parent->right)
         {
             toBeDeleted->left->parent = toBeDeleted->parent;
             toBeDeleted->parent->right = toBeDeleted->left;
             toBeDeleted->left = nullptr;
-            toBeDeleted->parent = nullptr;
-            return toBeDeleted;
         }
         if(toBeDeleted == toBeDeleted->parent->left)
         {
             toBeDeleted->left->parent = toBeDeleted->parent;
             toBeDeleted->parent->left = toBeDeleted->left;
             toBeDeleted->left = nullptr;
-            toBeDeleted->parent = nullptr;
-            return toBeDeleted;
         }
     }
+    if(toBeDeleted->right == nullptr && toBeDeleted->left == nullptr)
+    {
+        if(toBeDeleted == toBeDeleted->parent->right)
+        {
+            toBeDeleted->parent->right = nullptr;
+        }
+        if(toBeDeleted == toBeDeleted->parent->left)
+        {
+            toBeDeleted->parent->left = nullptr;
+        }
+    }else{
+        AVLTree* currentNode = toBeDeleted->left->right;
+        while(currentNode != nullptr)
+        {
+            currentNode = currentNode->right;
+        }
+        AVLTree* tempNode = currentNode->parent;
+        currentNode->parent = toBeDeleted->parent;
+        currentNode->right = toBeDeleted->right;
+        if(currentNode -> left != nullptr)
+        {
+            tempNode->right = currentNode->left;
+        }
+        currentNode->left = toBeDeleted->left;
+
+    }
     
+    
+    AVLTree* currentNode = toBeDeleted->parent; //The current node being balance checked
+    while(currentNode != nullptr)
+    {
+        int currentBalance = currentNode->ComputeUnbalanceLevel();
+        if(currentBalance == -2 && currentNode->left->ComputeUnbalanceLevel() == -1)
+        {
+            currentNode = currentNode->RightRotate();
+        }
+        if(currentBalance == 2 && currentNode->right->ComputeUnbalanceLevel() == 1)
+        {
+            currentNode = currentNode->LeftRotate();
+        }
+        if(currentBalance == 2 && currentNode->right->ComputeUnbalanceLevel() == -1)
+        {
+            currentNode = currentNode->right->RightRotate();
+            currentNode = currentNode->LeftRotate();
+        }
+        if(currentBalance == -2 && currentNode->left->ComputeUnbalanceLevel() == 1)
+        {
+            currentNode = currentNode->left->LeftRotate();
+            currentNode = currentNode->RightRotate();
+        }
+        currentNode = currentNode->parent;
+    }
+    
+    toBeDeleted->parent = nullptr;
+    return toBeDeleted;
 } //Incomplete
 
 int AVLTree::ComputeUnbalanceLevel()
@@ -183,7 +224,7 @@ AVLTree* AVLTree::RightRotate()
 
     if(nodeRotated->parent != nullptr)
     {
-        if((nodeRotated == nodeRotated->parent->left)){
+        if(nodeRotated == nodeRotated->parent->left){
             nodeRotated->parent->left = leftNode;
             leftNode->parent = nodeRotated->parent;
         }else{
@@ -210,7 +251,7 @@ AVLTree* AVLTree::LeftRotate()
 
     if(nodeRotated->parent != nullptr)
     {
-        if((nodeRotated == nodeRotated->parent->left)){
+        if(nodeRotated == nodeRotated->parent->left){
             nodeRotated->parent->left = rightNode;
             rightNode->parent = nodeRotated->parent;
         }else{
