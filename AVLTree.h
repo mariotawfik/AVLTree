@@ -22,7 +22,7 @@ public:
     AVLTree *Find(char v); //Searches for v and returns the address
     AVLTree *Delete(char v); //Searches for v, returns the address then removes it from the tree structure
     void ToString(); //Displays the tree in a string structure
-    bool Verify(); //
+    bool Verify(); //Verifies that the tree is balanced by checking the balance of the head of the tree
 };
 
 

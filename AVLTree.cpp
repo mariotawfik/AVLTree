@@ -133,9 +133,41 @@ AVLTree* AVLTree::Delete(char v)
     {
         if(toBeDeleted == toBeDeleted->parent->right)
         {
+            toBeDeleted->right->parent = toBeDeleted->parent;
             toBeDeleted->parent->right = toBeDeleted->right;
+            toBeDeleted->right = nullptr;
+            toBeDeleted->parent = nullptr;
+            return toBeDeleted;
+        }
+        if(toBeDeleted == toBeDeleted->parent->left)
+        {
+            toBeDeleted->right->parent = toBeDeleted->parent;
+            toBeDeleted->parent->left = toBeDeleted->right;
+            toBeDeleted->right = nullptr;
+            toBeDeleted->parent = nullptr;
+            return toBeDeleted;
         }
     }
+    if(toBeDeleted->right == nullptr)
+    {
+        if(toBeDeleted == toBeDeleted->parent->right)
+        {
+            toBeDeleted->left->parent = toBeDeleted->parent;
+            toBeDeleted->parent->right = toBeDeleted->left;
+            toBeDeleted->left = nullptr;
+            toBeDeleted->parent = nullptr;
+            return toBeDeleted;
+        }
+        if(toBeDeleted == toBeDeleted->parent->left)
+        {
+            toBeDeleted->left->parent = toBeDeleted->parent;
+            toBeDeleted->parent->left = toBeDeleted->left;
+            toBeDeleted->left = nullptr;
+            toBeDeleted->parent = nullptr;
+            return toBeDeleted;
+        }
+    }
+    
 } //Incomplete
 
 int AVLTree::ComputeUnbalanceLevel()
@@ -204,8 +236,13 @@ void AVLTree::ToString()
 
 bool AVLTree::Verify()
 {
-
-} //Incomplete
+    if(-1 <= this->ComputeUnbalanceLevel() <= 1)
+    {
+        return true;
+    }else{
+        return false;
+    }
+}
 
 int AVLTree::height()
 {

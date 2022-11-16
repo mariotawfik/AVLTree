@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		E6E907E929218048003958FD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6E907E829218048003958FD /* main.cpp */; };
+		E6E907F42924C071003958FD /* AVLTree.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6E907F22924C071003958FD /* AVLTree.cpp */; };
+		E6E907F62924C07E003958FD /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E6E907F52924C07E003958FD /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +25,9 @@
 
 /* Begin PBXFileReference section */
 		E6E907E529218048003958FD /* AVLTree */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = AVLTree; sourceTree = BUILT_PRODUCTS_DIR; };
-		E6E907E829218048003958FD /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		E6E907F22924C071003958FD /* AVLTree.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AVLTree.cpp; sourceTree = SOURCE_ROOT; };
+		E6E907F32924C071003958FD /* AVLTree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVLTree.h; sourceTree = SOURCE_ROOT; };
+		E6E907F52924C07E003958FD /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,7 +60,9 @@
 		E6E907E729218048003958FD /* AVLTree */ = {
 			isa = PBXGroup;
 			children = (
-				E6E907E829218048003958FD /* main.cpp */,
+				E6E907F52924C07E003958FD /* main.cpp */,
+				E6E907F22924C071003958FD /* AVLTree.cpp */,
+				E6E907F32924C071003958FD /* AVLTree.h */,
 			);
 			path = AVLTree;
 			sourceTree = "<group>";
@@ -119,7 +124,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6E907E929218048003958FD /* main.cpp in Sources */,
+				E6E907F42924C071003958FD /* AVLTree.cpp in Sources */,
+				E6E907F62924C07E003958FD /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
