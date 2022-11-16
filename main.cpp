@@ -3,13 +3,21 @@
 using namespace std;
 
 int main() {
-    AVLTree* Head = new AVLTree;
     
-    Head = Head->Insert(20);
-    Head = Head->Insert(10);
-    Head = Head->Insert(30);
-    Head = Head->Insert(60);
-    cout << Head->Verify();
+    srand(time(NULL));
+    
+    for(int j = 0; j < 10; j++)
+    {
+        AVLTree* Head = new AVLTree;
+    
+        for(int i = 0; i < 10; i++)
+        {
+            int randomNum = 1+rand()%100;
+            Head = Head->Insert(randomNum);
+        }
+    
+        cout << Head->Verify() << endl;
+    }
     
     return 0;
 }
